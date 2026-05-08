@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/data/mocktasks.ts","./src/lib/api.ts","./src/lib/storage.ts","./src/lib/tasklogic.test.ts","./src/lib/tasklogic.ts"],"version":"6.0.3"}

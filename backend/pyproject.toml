@@ -1,0 +1,20 @@
+[project]
+name = "ledgerly-backend"
+version = "0.1.0"
+description = "FastAPI backend for the Ledgerly personal task tracker."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi",
+  "httpx",
+  "pydantic",
+  "uvicorn[standard]"
+]
+
+[dependency-groups]
+dev = [
+  "pytest"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
