@@ -103,6 +103,41 @@ button:disabled {
   font-size: 1.04rem;
 }
 
+.hero-clock {
+  display: inline-grid;
+  gap: 4px;
+  min-width: min(100%, 310px);
+  margin-top: 26px;
+  border: 2px solid var(--ink);
+  background: rgba(255, 244, 220, 0.88);
+  padding: 14px 18px;
+  box-shadow: 4px 4px 0 rgba(51, 37, 19, 0.18);
+}
+
+.hero-clock__label,
+.hero-clock__date {
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-clock__label {
+  color: var(--tomato);
+  font-size: 0.78rem;
+}
+
+.hero-clock__time {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2.15rem, 5vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.hero-clock__date {
+  color: rgba(51, 37, 19, 0.75);
+  font-size: 0.84rem;
+}
+
 .hero__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(104px, 1fr));
