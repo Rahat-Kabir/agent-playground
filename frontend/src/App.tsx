@@ -59,16 +59,43 @@ export default function App() {
   const [form, setForm] = useState<TaskForm>(blankForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [apiNotice, setApiNotice] = useState("Local notebook ready.");
+  const [currentTime, setCurrentTime] = useState(() => new Date());
 
   useEffect(() => {
     saveTasks(tasks);
   }, [tasks]);
+
+  useEffect(() => {
+    const timerId = window.setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, []);
 
   const labels = useMemo(() => collectLabels(tasks), [tasks]);
   const displayedTasks = useMemo(() => visibleTasks(tasks, filters), [tasks, filters]);
   const openCount = tasks.filter((task) => task.status !== "done").length;
   const doneCount = tasks.filter((task) => task.status === "done").length;
   const overdueCount = tasks.filter((task) => isOverdue(task)).length;
+  const formattedTime = useMemo(
+    () =>
+      currentTime.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }),
+    [currentTime]
+  );
+  const formattedDate = useMemo(
+    () =>
+      currentTime.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      }),
+    [currentTime]
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -147,6 +174,13 @@ export default function App() {
             A pocket-sized desk planner for tasks, labels, due dates, and the small errands that deserve a proper
             index card.
           </p>
+          <div className="hero-clock" aria-label="Current time">
+            <span className="hero-clock__label">Desk clock</span>
+            <time className="hero-clock__time" dateTime={currentTime.toISOString()}>
+              {formattedTime}
+            </time>
+            <span className="hero-clock__date">{formattedDate}</span>
+          </div>
         </div>
         <div className="hero__stats" aria-label="Task summary">
           <span>
