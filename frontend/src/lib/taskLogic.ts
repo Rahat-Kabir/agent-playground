@@ -18,6 +18,14 @@ export function isOverdue(task: Task, today = new Date()): boolean {
   return parseDate(task.dueDate) < startOfDay(today);
 }
 
+export function isDueToday(task: Task, today = new Date()): boolean {
+  if (!task.dueDate || task.status === "done") {
+    return false;
+  }
+
+  return parseDate(task.dueDate).getTime() === startOfDay(today).getTime();
+}
+
 export function filterTasks(tasks: Task[], filters: TaskFilters, today = new Date()): Task[] {
   const query = filters.search.trim().toLowerCase();
   const label = filters.label.trim().toLowerCase();
