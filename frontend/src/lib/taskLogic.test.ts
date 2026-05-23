@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { filterTasks, isOverdue, parseLabels, sortTasks, visibleTasks } from "./taskLogic";
+import { filterTasks, isDueToday, isOverdue, parseLabels, sortTasks, visibleTasks } from "./taskLogic";
 import type { Task, TaskFilters } from "../types";
 
 const baseFilters: TaskFilters = {
@@ -32,6 +32,14 @@ describe("task logic", () => {
     expect(isOverdue(makeTask({ dueDate: "2026-05-08" }), today)).toBe(true);
     expect(isOverdue(makeTask({ dueDate: "2026-05-08", status: "done" }), today)).toBe(false);
     expect(isOverdue(makeTask({ dueDate: "" }), today)).toBe(false);
+  });
+
+  it("detects tasks due today without flagging other dates", () => {
+    const today = new Date("2026-05-09T12:00:00");
+
+    expect(isDueToday(makeTask({ dueDate: "2026-05-09" }), today)).toBe(true);
+    expect(isDueToday(makeTask({ dueDate: "2026-05-10" }), today)).toBe(false);
+    expect(isDueToday(makeTask({ dueDate: "2026-05-09", status: "done" }), today)).toBe(false);
   });
 
   it("filters by status, priority, label, overdue state, and search", () => {

@@ -3,6 +3,7 @@ import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { fetchSeedTasks } from "./lib/api";
 import { collectLabels, isOverdue, parseLabels, visibleTasks } from "./lib/taskLogic";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
+import { useDueDateReminders } from "./lib/useDueDateReminders";
 import type { SortKey, Task, TaskFilters, TaskPriority, TaskStatus } from "./types";
 
 type TaskForm = {
@@ -60,6 +61,7 @@ export default function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [apiNotice, setApiNotice] = useState("Local notebook ready.");
   const [currentTime, setCurrentTime] = useState(() => new Date());
+  const dueDateReminders = useDueDateReminders(tasks);
 
   useEffect(() => {
     saveTasks(tasks);
@@ -311,6 +313,7 @@ export default function App() {
 
           <div className="notice" role="status">
             {apiNotice}
+            {dueDateReminders.status ? <span className="notice__secondary">{dueDateReminders.status}</span> : null}
           </div>
 
           <div className="filters">
@@ -380,7 +383,21 @@ export default function App() {
               />
               Overdue only
             </label>
+            <label className="checkbox-label reminders-toggle">
+              <input
+                type="checkbox"
+                checked={dueDateReminders.enabled}
+                onChange={(event) => dueDateReminders.setEnabled(event.target.checked)}
+              />
+              Due-date reminders
+            </label>
           </div>
+          {dueDateReminders.enabled ? (
+            <p className="reminders-hint">
+              Desktop notifications fire once per day for open tasks due today. Keep this tab open or check back
+              periodically.
+            </p>
+          ) : null}
 
           <div className="task-list">
             {displayedTasks.map((task) => {
