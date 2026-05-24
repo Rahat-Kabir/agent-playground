@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap");
 
-:root {
+:root,
+[data-theme="light"] {
+  color-scheme: light;
   color: #332513;
   background: #d9c49b;
   font-family: "Courier Prime", "Courier New", monospace;
@@ -15,6 +17,87 @@
   --olive: #59683b;
   --blue: #315f6d;
   --shadow: 8px 8px 0 rgba(67, 42, 18, 0.22);
+  --canvas: #d9c49b;
+  --canvas-glow: rgba(255, 235, 175, 0.55);
+  --canvas-grid: rgba(86, 52, 24, 0.08);
+  --hero-accent: rgba(185, 73, 45, 0.16);
+  --hero-lines: rgba(51, 37, 19, 0.04);
+  --hero-clock-bg: rgba(255, 244, 220, 0.88);
+  --hero-clock-shadow: rgba(51, 37, 19, 0.18);
+  --hero-stats-bg: rgba(101, 53, 31, 0.08);
+  --hero-stats-divider: rgba(51, 37, 19, 0.4);
+  --text-muted: rgba(51, 37, 19, 0.75);
+  --panel-bg: rgba(244, 230, 200, 0.94);
+  --panel-header-bg: rgba(227, 201, 153, 0.6);
+  --input-bg: #fff4dc;
+  --input-inset: rgba(101, 53, 31, 0.08);
+  --button-hover: #f2d37f;
+  --button-shadow: rgba(51, 37, 19, 0.25);
+  --button-primary-text: #fff8e7;
+  --button-danger-bg: #f0d0c3;
+  --notice-border: rgba(51, 37, 19, 0.55);
+  --notice-bg: rgba(255, 244, 220, 0.7);
+  --task-card-bg: #fff2cf;
+  --task-card-lines: rgba(49, 95, 109, 0.12);
+  --task-card-highlight: rgba(255, 255, 255, 0.38);
+  --task-card-tape: rgba(255, 250, 229, 0.78);
+  --task-card-tape-border: rgba(51, 37, 19, 0.35);
+  --task-meta: rgba(51, 37, 19, 0.78);
+  --task-meta-border: rgba(51, 37, 19, 0.35);
+  --stamp-low-bg: #c8d09c;
+  --status-todo-bg: #f3ddad;
+  --status-progress-bg: #b7d1d8;
+  --status-done-bg: #c6d0a8;
+  --overdue-bg: #f8e2dd;
+  --overdue-text: #8d2717;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  color: #e8dcc8;
+  background: #17130f;
+  --ink: #e8dcc8;
+  --paper: #2b241c;
+  --paper-dark: #3a3128;
+  --mahogany: #c9a882;
+  --tomato: #d66a52;
+  --mustard: #e0b04a;
+  --olive: #8fa06a;
+  --blue: #6f9aaa;
+  --shadow: 8px 8px 0 rgba(0, 0, 0, 0.45);
+  --canvas: #17130f;
+  --canvas-glow: rgba(120, 88, 48, 0.35);
+  --canvas-grid: rgba(232, 220, 200, 0.06);
+  --hero-accent: rgba(214, 106, 82, 0.2);
+  --hero-lines: rgba(232, 220, 200, 0.05);
+  --hero-clock-bg: rgba(43, 36, 28, 0.95);
+  --hero-clock-shadow: rgba(0, 0, 0, 0.35);
+  --hero-stats-bg: rgba(0, 0, 0, 0.18);
+  --hero-stats-divider: rgba(232, 220, 200, 0.22);
+  --text-muted: rgba(232, 220, 200, 0.68);
+  --panel-bg: rgba(36, 30, 24, 0.96);
+  --panel-header-bg: rgba(58, 49, 40, 0.85);
+  --input-bg: #1f1a15;
+  --input-inset: rgba(0, 0, 0, 0.25);
+  --button-hover: #4d4033;
+  --button-shadow: rgba(0, 0, 0, 0.4);
+  --button-primary-text: #fff4e8;
+  --button-danger-bg: #4a2f28;
+  --notice-border: rgba(232, 220, 200, 0.35);
+  --notice-bg: rgba(31, 26, 21, 0.85);
+  --task-card-bg: #2f2720;
+  --task-card-lines: rgba(111, 154, 170, 0.18);
+  --task-card-highlight: rgba(255, 255, 255, 0.04);
+  --task-card-tape: rgba(58, 49, 40, 0.92);
+  --task-card-tape-border: rgba(232, 220, 200, 0.2);
+  --task-meta: rgba(232, 220, 200, 0.72);
+  --task-meta-border: rgba(232, 220, 200, 0.22);
+  --stamp-low-bg: #4f5a3a;
+  --status-todo-bg: #5a4a2b;
+  --status-progress-bg: #35515a;
+  --status-done-bg: #3f4d33;
+  --overdue-bg: #4a2a24;
+  --overdue-text: #f0b5a8;
 }
 
 * {
@@ -25,12 +108,16 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  color: inherit;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 235, 175, 0.55), transparent 26rem),
-    linear-gradient(90deg, rgba(86, 52, 24, 0.08) 1px, transparent 1px),
-    linear-gradient(rgba(86, 52, 24, 0.08) 1px, transparent 1px),
-    #d9c49b;
+    radial-gradient(circle at 18% 12%, var(--canvas-glow), transparent 26rem),
+    linear-gradient(90deg, var(--canvas-grid) 1px, transparent 1px),
+    linear-gradient(var(--canvas-grid) 1px, transparent 1px),
+    var(--canvas);
   background-size: auto, 42px 42px, 42px 42px, auto;
+  transition:
+    background 200ms ease,
+    color 200ms ease;
 }
 
 button,
@@ -66,6 +153,10 @@ button:disabled {
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .hero::before {
@@ -73,8 +164,8 @@ button:disabled {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(120deg, transparent 0 62%, rgba(185, 73, 45, 0.16) 62% 74%, transparent 74%),
-    repeating-linear-gradient(0deg, rgba(51, 37, 19, 0.04), rgba(51, 37, 19, 0.04) 1px, transparent 1px, transparent 5px);
+    linear-gradient(120deg, transparent 0 62%, var(--hero-accent) 62% 74%, transparent 74%),
+    repeating-linear-gradient(0deg, var(--hero-lines), var(--hero-lines) 1px, transparent 1px, transparent 5px);
   pointer-events: none;
 }
 
@@ -109,9 +200,9 @@ button:disabled {
   min-width: min(100%, 310px);
   margin-top: 26px;
   border: 2px solid var(--ink);
-  background: rgba(255, 244, 220, 0.88);
+  background: var(--hero-clock-bg);
   padding: 14px 18px;
-  box-shadow: 4px 4px 0 rgba(51, 37, 19, 0.18);
+  box-shadow: 4px 4px 0 var(--hero-clock-shadow);
 }
 
 .hero-clock__label,
@@ -134,15 +225,40 @@ button:disabled {
 }
 
 .hero-clock__date {
-  color: rgba(51, 37, 19, 0.75);
+  color: var(--text-muted);
   font-size: 0.84rem;
+}
+
+.theme-control {
+  display: grid;
+  gap: 7px;
+  max-width: 310px;
+  margin-top: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.theme-control__label {
+  color: var(--tomato);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+}
+
+.theme-control select {
+  width: 100%;
+  border: 2px solid var(--ink);
+  background: var(--input-bg);
+  color: var(--ink);
+  padding: 11px 12px;
+  box-shadow: inset 3px 3px 0 var(--input-inset);
 }
 
 .hero__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(104px, 1fr));
   border-left: 3px solid var(--ink);
-  background: rgba(101, 53, 31, 0.08);
+  background: var(--hero-stats-bg);
 }
 
 .hero__stats span {
@@ -151,7 +267,7 @@ button:disabled {
   justify-items: center;
   min-height: 100%;
   padding: 20px;
-  border-left: 1px dashed rgba(51, 37, 19, 0.4);
+  border-left: 1px dashed var(--hero-stats-divider);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -184,14 +300,17 @@ button:disabled {
 
 .panel {
   border: 3px solid var(--ink);
-  background: rgba(244, 230, 200, 0.94);
+  background: var(--panel-bg);
   box-shadow: var(--shadow);
+  transition:
+    background 200ms ease,
+    border-color 200ms ease;
 }
 
 .panel__header {
   padding: 22px 24px;
   border-bottom: 3px solid var(--ink);
-  background: rgba(227, 201, 153, 0.6);
+  background: var(--panel-header-bg);
 }
 
 .panel__header h2 {
@@ -222,11 +341,11 @@ textarea {
   width: 100%;
   border: 2px solid var(--ink);
   border-radius: 0;
-  background: #fff4dc;
+  background: var(--input-bg);
   color: var(--ink);
   padding: 11px 12px;
   outline-offset: 3px;
-  box-shadow: inset 3px 3px 0 rgba(101, 53, 31, 0.08);
+  box-shadow: inset 3px 3px 0 var(--input-inset);
 }
 
 textarea {
@@ -257,7 +376,7 @@ textarea {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  box-shadow: 3px 3px 0 rgba(51, 37, 19, 0.25);
+  box-shadow: 3px 3px 0 var(--button-shadow);
   transition:
     transform 140ms ease,
     box-shadow 140ms ease,
@@ -265,18 +384,18 @@ textarea {
 }
 
 .button:hover:not(:disabled) {
-  background: #f2d37f;
-  box-shadow: 1px 1px 0 rgba(51, 37, 19, 0.25);
+  background: var(--button-hover);
+  box-shadow: 1px 1px 0 var(--button-shadow);
   transform: translate(2px, 2px);
 }
 
 .button--primary {
   background: var(--tomato);
-  color: #fff8e7;
+  color: var(--button-primary-text);
 }
 
 .button--danger {
-  background: #f0d0c3;
+  background: var(--button-danger-bg);
 }
 
 .ledger-panel__header {
@@ -290,8 +409,8 @@ textarea {
   display: grid;
   gap: 6px;
   margin: 20px 24px 0;
-  border: 2px dashed rgba(51, 37, 19, 0.55);
-  background: rgba(255, 244, 220, 0.7);
+  border: 2px dashed var(--notice-border);
+  background: var(--notice-bg);
   padding: 10px 12px;
 }
 
@@ -342,11 +461,12 @@ textarea {
   gap: 14px;
   border: 2px solid var(--ink);
   background:
-    linear-gradient(rgba(255, 255, 255, 0.38), transparent 34px),
-    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(49, 95, 109, 0.12) 29px),
-    #fff2cf;
+    linear-gradient(var(--task-card-highlight), transparent 34px),
+    repeating-linear-gradient(0deg, transparent, transparent 28px, var(--task-card-lines) 29px),
+    var(--task-card-bg);
   padding: 18px;
   min-height: 260px;
+  transition: background 200ms ease;
 }
 
 .task-card::after {
@@ -356,8 +476,8 @@ textarea {
   height: 20px;
   top: -12px;
   left: 28px;
-  border: 1px solid rgba(51, 37, 19, 0.35);
-  background: rgba(255, 250, 229, 0.78);
+  border: 1px solid var(--task-card-tape-border);
+  background: var(--task-card-tape);
   transform: rotate(-2deg);
 }
 
@@ -393,7 +513,7 @@ textarea {
 
 .stamp--high {
   background: var(--tomato);
-  color: #fff8e7;
+  color: var(--button-primary-text);
 }
 
 .stamp--medium {
@@ -401,34 +521,34 @@ textarea {
 }
 
 .stamp--low {
-  background: #c8d09c;
+  background: var(--stamp-low-bg);
 }
 
 .status-pill--todo {
-  background: #f3ddad;
+  background: var(--status-todo-bg);
 }
 
 .status-pill--in-progress {
-  background: #b7d1d8;
+  background: var(--status-progress-bg);
 }
 
 .status-pill--done {
-  background: #c6d0a8;
+  background: var(--status-done-bg);
 }
 
 .overdue {
-  background: #f8e2dd;
-  color: #8d2717;
+  background: var(--overdue-bg);
+  color: var(--overdue-text);
 }
 
 .task-card__meta {
   margin-top: auto;
-  color: rgba(51, 37, 19, 0.78);
+  color: var(--task-meta);
   font-size: 0.92rem;
 }
 
 .task-card__meta span {
-  border-top: 1px solid rgba(51, 37, 19, 0.35);
+  border-top: 1px solid var(--task-meta-border);
   padding-top: 8px;
 }
 

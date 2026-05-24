@@ -11,6 +11,7 @@ A small personal task tracker with a FastAPI/Pydantic backend and a React/Vite f
 - Sort by due date, priority, title, or newest.
 - Load mock seed tasks from the FastAPI server or reset browser-local data.
 - Optional desktop notifications for open tasks due today (once per task per day).
+- Light, dark, or system-matched color theme (Desk lamp control).
 
 ## Project Structure
 
@@ -90,3 +91,5 @@ npm run build
 Tasks are saved in browser `localStorage`, so refreshing keeps your cards. Use `Reset local` to restore the bundled sample cards, or `Load API sample` to pull the FastAPI mock tasks into localStorage.
 
 Enable **Due-date reminders** in the filter bar to receive one desktop notification per open task on its due date. The browser will ask for notification permission the first time you turn reminders on. Reminders re-check about once a minute while the page stays open.
+
+Use **Desk lamp** in the hero section to switch between day ledger (light), night ledger (dark), or match your OS theme. The choice is saved in `localStorage`.

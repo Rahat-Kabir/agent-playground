@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ledgerly Task Tracker</title>
+    <script>
+      (function () {
+        var key = "ledgerly.theme.v1";
+        var pref = localStorage.getItem(key);
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var dark = pref === "dark" || (pref !== "light" && prefersDark);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
