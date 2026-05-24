@@ -4,6 +4,8 @@ import { fetchSeedTasks } from "./lib/api";
 import { collectLabels, isOverdue, parseLabels, visibleTasks } from "./lib/taskLogic";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
+import { useTheme } from "./lib/useTheme";
+import type { ThemePreference } from "./lib/theme";
 import type { SortKey, Task, TaskFilters, TaskPriority, TaskStatus } from "./types";
 
 type TaskForm = {
@@ -62,6 +64,7 @@ export default function App() {
   const [apiNotice, setApiNotice] = useState("Local notebook ready.");
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const dueDateReminders = useDueDateReminders(tasks);
+  const theme = useTheme();
 
   useEffect(() => {
     saveTasks(tasks);
@@ -183,6 +186,18 @@ export default function App() {
             </time>
             <span className="hero-clock__date">{formattedDate}</span>
           </div>
+          <label className="theme-control">
+            <span className="theme-control__label">Desk lamp</span>
+            <select
+              value={theme.preference}
+              onChange={(event) => theme.setPreference(event.target.value as ThemePreference)}
+              aria-label="Color theme"
+            >
+              <option value="system">Match system</option>
+              <option value="light">Day ledger</option>
+              <option value="dark">Night ledger</option>
+            </select>
+          </label>
         </div>
         <div className="hero__stats" aria-label="Task summary">
           <span>
