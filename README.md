@@ -12,6 +12,7 @@ A small personal task tracker with a FastAPI/Pydantic backend and a React/Vite f
 - Load mock seed tasks from the FastAPI server or reset browser-local data.
 - Optional desktop notifications for open tasks due today (once per task per day).
 - Light, dark, or system-matched color theme (Desk lamp control).
+- Export and import the browser ledger as JSON for backup or device moves.
 
 ## Project Structure
 
@@ -31,6 +32,7 @@ frontend/
     data/mockTasks.ts
     lib/taskLogic.ts
     lib/storage.ts
+    lib/ledgerExport.ts
     lib/api.ts
     styles.css
 ```
@@ -93,3 +95,5 @@ Tasks are saved in browser `localStorage`, so refreshing keeps your cards. Use `
 Enable **Due-date reminders** in the filter bar to receive one desktop notification per open task on its due date. The browser will ask for notification permission the first time you turn reminders on. Reminders re-check about once a minute while the page stays open.
 
 Use **Desk lamp** in the hero section to switch between day ledger (light), night ledger (dark), or match your OS theme. The choice is saved in `localStorage`.
+
+Use **Export JSON** to download your current cards as a `ledgerly-tasks-YYYY-MM-DD.json` file. Use **Import JSON** to replace the in-browser ledger with a previously exported file (or any compatible task array). Imported tasks are validated before they replace local data.
