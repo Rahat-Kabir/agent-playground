@@ -1,6 +1,7 @@
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { fetchSeedTasks } from "./lib/api";
+import { LedgerImportError, downloadLedgerExport, parseLedgerImport } from "./lib/ledgerExport";
 import { collectLabels, isOverdue, parseLabels, visibleTasks } from "./lib/taskLogic";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
@@ -65,6 +66,7 @@ export default function App() {
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const dueDateReminders = useDueDateReminders(tasks);
   const theme = useTheme();
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     saveTasks(tasks);
@@ -166,6 +168,35 @@ export default function App() {
       setApiNotice("Loaded the FastAPI mock ledger into localStorage.");
     } catch {
       setApiNotice("FastAPI is not reachable, so the browser ledger stayed local.");
+    }
+  }
+
+  function handleExportLedger() {
+    downloadLedgerExport(tasks);
+    setApiNotice(`Exported ${tasks.length} task${tasks.length === 1 ? "" : "s"} to JSON.`);
+  }
+
+  function handleImportClick() {
+    importInputRef.current?.click();
+  }
+
+  async function handleImportLedger(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const importedTasks = parseLedgerImport(await file.text());
+      setTasks(importedTasks);
+      setEditingId(null);
+      setForm(blankForm);
+      setApiNotice(`Imported ${importedTasks.length} task${importedTasks.length === 1 ? "" : "s"} from ${file.name}.`);
+    } catch (error) {
+      const message = error instanceof LedgerImportError ? error.message : "Unable to import the ledger file.";
+      setApiNotice(message);
     }
   }
 
@@ -310,6 +341,19 @@ export default function App() {
               <h2>{displayedTasks.length} visible tasks</h2>
             </div>
             <div className="data-actions">
+              <button type="button" className="button" onClick={handleExportLedger}>
+                Export JSON
+              </button>
+              <button type="button" className="button" onClick={handleImportClick}>
+                Import JSON
+              </button>
+              <input
+                ref={importInputRef}
+                type="file"
+                accept="application/json,.json"
+                className="sr-only"
+                onChange={(event) => void handleImportLedger(event)}
+              />
               <button type="button" className="button" onClick={loadApiSeeds}>
                 Load API sample
               </button>
