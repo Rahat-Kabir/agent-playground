@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { filterTasks, isDueToday, isOverdue, parseLabels, sortTasks, visibleTasks } from "./taskLogic";
+import { filterTasks, isDueThisWeek, isDueToday, isOverdue, parseLabels, sortTasks, visibleTasks } from "./taskLogic";
 import type { Task, TaskFilters } from "../types";
 
 const baseFilters: TaskFilters = {
   status: "all",
   priority: "all",
   label: "",
+  dueWindow: "all",
   overdueOnly: false,
   search: "",
   sortBy: "due_date"
@@ -40,6 +41,35 @@ describe("task logic", () => {
     expect(isDueToday(makeTask({ dueDate: "2026-05-09" }), today)).toBe(true);
     expect(isDueToday(makeTask({ dueDate: "2026-05-10" }), today)).toBe(false);
     expect(isDueToday(makeTask({ dueDate: "2026-05-09", status: "done" }), today)).toBe(false);
+  });
+
+  it("detects tasks due this calendar week (Monday through Sunday)", () => {
+    const saturday = new Date("2026-05-09T12:00:00");
+
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-05" }), saturday)).toBe(true);
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-09" }), saturday)).toBe(true);
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-10" }), saturday)).toBe(true);
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-03" }), saturday)).toBe(false);
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-11" }), saturday)).toBe(false);
+    expect(isDueThisWeek(makeTask({ dueDate: "2026-05-09", status: "done" }), saturday)).toBe(false);
+  });
+
+  it("filters by due today and due this week", () => {
+    const today = new Date("2026-05-09T12:00:00");
+    const tasks = [
+      makeTask({ title: "Due today", dueDate: "2026-05-09" }),
+      makeTask({ title: "Due Sunday", dueDate: "2026-05-10" }),
+      makeTask({ title: "Due next week", dueDate: "2026-05-11" }),
+      makeTask({ title: "Due last week", dueDate: "2026-05-03" })
+    ];
+
+    expect(filterTasks(tasks, { ...baseFilters, dueWindow: "today" }, today).map((task) => task.title)).toEqual([
+      "Due today"
+    ]);
+    expect(filterTasks(tasks, { ...baseFilters, dueWindow: "this_week" }, today).map((task) => task.title)).toEqual([
+      "Due today",
+      "Due Sunday"
+    ]);
   });
 
   it("filters by status, priority, label, overdue state, and search", () => {
