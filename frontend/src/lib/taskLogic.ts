@@ -26,6 +26,18 @@ export function isDueToday(task: Task, today = new Date()): boolean {
   return parseDate(task.dueDate).getTime() === startOfDay(today).getTime();
 }
 
+export function isDueThisWeek(task: Task, today = new Date()): boolean {
+  if (!task.dueDate || task.status === "done") {
+    return false;
+  }
+
+  const dueDate = parseDate(task.dueDate);
+  const weekStart = startOfWeek(today);
+  const weekEnd = endOfWeek(weekStart);
+
+  return dueDate >= weekStart && dueDate <= weekEnd;
+}
+
 export function filterTasks(tasks: Task[], filters: TaskFilters, today = new Date()): Task[] {
   const query = filters.search.trim().toLowerCase();
   const label = filters.label.trim().toLowerCase();
@@ -38,6 +50,12 @@ export function filterTasks(tasks: Task[], filters: TaskFilters, today = new Dat
       return false;
     }
     if (label && !task.labels.some((item) => item.toLowerCase() === label)) {
+      return false;
+    }
+    if (filters.dueWindow === "today" && !isDueToday(task, today)) {
+      return false;
+    }
+    if (filters.dueWindow === "this_week" && !isDueThisWeek(task, today)) {
       return false;
     }
     if (filters.overdueOnly && !isOverdue(task, today)) {
@@ -101,4 +119,17 @@ export function parseLabels(value: string): string[] {
 
 function dateValue(value: string): number {
   return value ? parseDate(value).getTime() : Number.MAX_SAFE_INTEGER;
+}
+
+/** Monday-based calendar week (Monday 00:00 through Sunday 23:59:59.999). */
+function startOfWeek(date: Date): Date {
+  const dayStart = startOfDay(date);
+  const weekday = dayStart.getDay();
+  const daysFromMonday = weekday === 0 ? 6 : weekday - 1;
+
+  return new Date(dayStart.getFullYear(), dayStart.getMonth(), dayStart.getDate() - daysFromMonday);
+}
+
+function endOfWeek(weekStart: Date): Date {
+  return new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6, 23, 59, 59, 999);
 }

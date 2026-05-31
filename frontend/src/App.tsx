@@ -7,7 +7,7 @@ import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
 import { useTheme } from "./lib/useTheme";
 import type { ThemePreference } from "./lib/theme";
-import type { SortKey, Task, TaskFilters, TaskPriority, TaskStatus } from "./types";
+import type { DueWindow, SortKey, Task, TaskFilters, TaskPriority, TaskStatus } from "./types";
 
 type TaskForm = {
   title: string;
@@ -22,6 +22,7 @@ const defaultFilters: TaskFilters = {
   status: "all",
   priority: "all",
   label: "",
+  dueWindow: "all",
   overdueOnly: false,
   search: "",
   sortBy: "due_date"
@@ -48,6 +49,12 @@ const priorityOptions: Array<{ value: TaskPriority | "all"; label: string }> = [
   { value: "high", label: "High" },
   { value: "medium", label: "Medium" },
   { value: "low", label: "Low" }
+];
+
+const dueWindowOptions: Array<{ value: DueWindow; label: string }> = [
+  { value: "all", label: "Any due date" },
+  { value: "today", label: "Due today" },
+  { value: "this_week", label: "Due this week" }
 ];
 
 const sortOptions: Array<{ value: SortKey; label: string }> = [
@@ -417,6 +424,19 @@ export default function App() {
                 {labels.map((label) => (
                   <option key={label} value={label}>
                     {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Due
+              <select
+                value={filters.dueWindow}
+                onChange={(event) => setFilters({ ...filters, dueWindow: event.target.value as DueWindow })}
+              >
+                {dueWindowOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>

@@ -6,7 +6,7 @@ A small personal task tracker with a FastAPI/Pydantic backend and a React/Vite f
 
 - Create, edit, delete, and complete tasks.
 - Track title, description, status, priority, due date, and labels.
-- Filter by status, priority, label, and overdue tasks.
+- Filter by status, priority, label, due today, due this week (Monday–Sunday), and overdue tasks.
 - Search task titles and descriptions.
 - Sort by due date, priority, title, or newest.
 - Load mock seed tasks from the FastAPI server or reset browser-local data.
