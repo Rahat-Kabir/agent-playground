@@ -38,6 +38,27 @@ export function isDueThisWeek(task: Task, today = new Date()): boolean {
   return dueDate >= weekStart && dueDate <= weekEnd;
 }
 
+export type DueSoonSummary = {
+  dueToday: number;
+  dueThisWeek: number;
+};
+
+export function summarizeDueSoon(tasks: Task[], today = new Date()): DueSoonSummary {
+  let dueToday = 0;
+  let dueThisWeek = 0;
+
+  for (const task of tasks) {
+    if (isDueToday(task, today)) {
+      dueToday += 1;
+    }
+    if (isDueThisWeek(task, today)) {
+      dueThisWeek += 1;
+    }
+  }
+
+  return { dueToday, dueThisWeek };
+}
+
 export function filterTasks(tasks: Task[], filters: TaskFilters, today = new Date()): Task[] {
   const query = filters.search.trim().toLowerCase();
   const label = filters.label.trim().toLowerCase();
