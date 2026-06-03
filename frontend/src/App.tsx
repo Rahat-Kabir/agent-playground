@@ -2,7 +2,7 @@ import { type ChangeEvent, type FormEvent, useEffect, useMemo, useRef, useState 
 
 import { fetchSeedTasks } from "./lib/api";
 import { LedgerImportError, downloadLedgerExport, parseLedgerImport } from "./lib/ledgerExport";
-import { collectLabels, isOverdue, parseLabels, visibleTasks } from "./lib/taskLogic";
+import { collectLabels, isOverdue, parseLabels, summarizeDueSoon, visibleTasks } from "./lib/taskLogic";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
 import { useTheme } from "./lib/useTheme";
@@ -91,7 +91,8 @@ export default function App() {
   const displayedTasks = useMemo(() => visibleTasks(tasks, filters), [tasks, filters]);
   const openCount = tasks.filter((task) => task.status !== "done").length;
   const doneCount = tasks.filter((task) => task.status === "done").length;
-  const overdueCount = tasks.filter((task) => isOverdue(task)).length;
+  const overdueCount = tasks.filter((task) => isOverdue(task, currentTime)).length;
+  const dueSoon = useMemo(() => summarizeDueSoon(tasks, currentTime), [tasks, currentTime]);
   const formattedTime = useMemo(
     () =>
       currentTime.toLocaleTimeString(undefined, {
@@ -241,6 +242,14 @@ export default function App() {
           <span>
             <strong>{openCount}</strong>
             open
+          </span>
+          <span>
+            <strong>{dueSoon.dueToday}</strong>
+            due today
+          </span>
+          <span>
+            <strong>{dueSoon.dueThisWeek}</strong>
+            due this week
           </span>
           <span>
             <strong>{overdueCount}</strong>

@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { filterTasks, isDueThisWeek, isDueToday, isOverdue, parseLabels, sortTasks, visibleTasks } from "./taskLogic";
+import {
+  filterTasks,
+  isDueThisWeek,
+  isDueToday,
+  isOverdue,
+  parseLabels,
+  sortTasks,
+  summarizeDueSoon,
+  visibleTasks
+} from "./taskLogic";
 import type { Task, TaskFilters } from "../types";
 
 const baseFilters: TaskFilters = {
@@ -52,6 +61,20 @@ describe("task logic", () => {
     expect(isDueThisWeek(makeTask({ dueDate: "2026-05-03" }), saturday)).toBe(false);
     expect(isDueThisWeek(makeTask({ dueDate: "2026-05-11" }), saturday)).toBe(false);
     expect(isDueThisWeek(makeTask({ dueDate: "2026-05-09", status: "done" }), saturday)).toBe(false);
+  });
+
+  it("summarizes open tasks due today and due this week", () => {
+    const today = new Date("2026-05-09T12:00:00");
+    const tasks = [
+      makeTask({ title: "Due today", dueDate: "2026-05-09" }),
+      makeTask({ title: "Also today", dueDate: "2026-05-09" }),
+      makeTask({ title: "Due Sunday", dueDate: "2026-05-10" }),
+      makeTask({ title: "Due next week", dueDate: "2026-05-11" }),
+      makeTask({ title: "Filed today", dueDate: "2026-05-09", status: "done" }),
+      makeTask({ title: "No due date" })
+    ];
+
+    expect(summarizeDueSoon(tasks, today)).toEqual({ dueToday: 2, dueThisWeek: 3 });
   });
 
   it("filters by due today and due this week", () => {

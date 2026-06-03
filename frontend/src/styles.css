@@ -256,7 +256,7 @@ button:disabled {
 
 .hero__stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(104px, 1fr));
+  grid-template-columns: repeat(5, minmax(88px, 1fr));
   border-left: 3px solid var(--ink);
   background: var(--hero-stats-bg);
 }
