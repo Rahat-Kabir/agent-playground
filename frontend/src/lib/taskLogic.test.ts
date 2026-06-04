@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  countFiledTasks,
   filterTasks,
   isDueThisWeek,
   isDueToday,
   isOverdue,
   parseLabels,
+  removeFiledTasks,
   sortTasks,
   summarizeDueSoon,
   visibleTasks
@@ -162,5 +164,17 @@ describe("task logic", () => {
 
   it("normalizes comma-separated labels", () => {
     expect(parseLabels(" Home, finance, home ,, ARCHIVE ")).toEqual(["home", "finance", "archive"]);
+  });
+
+  it("counts and removes filed tasks", () => {
+    const tasks = [
+      makeTask({ id: "open", status: "todo" }),
+      makeTask({ id: "filed-a", status: "done" }),
+      makeTask({ id: "in-progress", status: "in-progress" }),
+      makeTask({ id: "filed-b", status: "done" })
+    ];
+
+    expect(countFiledTasks(tasks)).toBe(2);
+    expect(removeFiledTasks(tasks).map((task) => task.id)).toEqual(["open", "in-progress"]);
   });
 });

@@ -2,7 +2,15 @@ import { type ChangeEvent, type FormEvent, useEffect, useMemo, useRef, useState 
 
 import { fetchSeedTasks } from "./lib/api";
 import { LedgerImportError, downloadLedgerExport, parseLedgerImport } from "./lib/ledgerExport";
-import { collectLabels, isOverdue, parseLabels, summarizeDueSoon, visibleTasks } from "./lib/taskLogic";
+import {
+  collectLabels,
+  countFiledTasks,
+  isOverdue,
+  parseLabels,
+  removeFiledTasks,
+  summarizeDueSoon,
+  visibleTasks
+} from "./lib/taskLogic";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
 import { useTheme } from "./lib/useTheme";
@@ -167,6 +175,32 @@ export default function App() {
       setEditingId(null);
       setForm(blankForm);
     }
+  }
+
+
+  function clearFiledTasks() {
+    const filedCount = countFiledTasks(tasks);
+    if (filedCount === 0) {
+      setApiNotice("No filed tasks to clear.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Remove ${filedCount} filed task${filedCount === 1 ? "" : "s"}? This cannot be undone.`
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setTasks((current) => {
+      const next = removeFiledTasks(current);
+      if (editingId && !next.some((task) => task.id === editingId)) {
+        setEditingId(null);
+        setForm(blankForm);
+      }
+      return next;
+    });
+    setApiNotice(`Cleared ${filedCount} filed task${filedCount === 1 ? "" : "s"}.`);
   }
 
   async function loadApiSeeds() {
@@ -372,6 +406,9 @@ export default function App() {
               />
               <button type="button" className="button" onClick={loadApiSeeds}>
                 Load API sample
+              </button>
+              <button type="button" className="button" onClick={clearFiledTasks}>
+                Clear filed
               </button>
               <button
                 type="button"

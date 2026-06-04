@@ -121,6 +121,14 @@ export function visibleTasks(tasks: Task[], filters: TaskFilters, today = new Da
   return sortTasks(filterTasks(tasks, filters, today), filters.sortBy);
 }
 
+export function countFiledTasks(tasks: Task[]): number {
+  return tasks.filter((task) => task.status === "done").length;
+}
+
+export function removeFiledTasks(tasks: Task[]): Task[] {
+  return tasks.filter((task) => task.status !== "done");
+}
+
 export function collectLabels(tasks: Task[]): string[] {
   return Array.from(new Set(tasks.flatMap((task) => task.labels.map((label) => label.trim()).filter(Boolean)))).sort((a, b) =>
     a.localeCompare(b)
