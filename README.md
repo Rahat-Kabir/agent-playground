@@ -14,6 +14,7 @@ A small personal task tracker with a FastAPI/Pydantic backend and a React/Vite f
 - Optional desktop notifications for open tasks due today (once per task per day).
 - Light, dark, or system-matched color theme (Desk lamp control).
 - Export and import the browser ledger as JSON for backup or device moves.
+- Clear all filed (completed) tasks in one step with confirmation.
 
 ## Project Structure
 
