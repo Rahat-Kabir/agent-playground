@@ -8,6 +8,7 @@ import {
   isOverdue,
   parseLabels,
   removeFiledTasks,
+  reopenTaskInList,
   sortTasks,
   summarizeDueSoon,
   visibleTasks
@@ -177,4 +178,17 @@ describe("task logic", () => {
     expect(countFiledTasks(tasks)).toBe(2);
     expect(removeFiledTasks(tasks).map((task) => task.id)).toEqual(["open", "in-progress"]);
   });
+  it("reopens a filed task back to todo", () => {
+    const tasks = [
+      makeTask({ id: "filed", status: "done" }),
+      makeTask({ id: "open", status: "in-progress" })
+    ];
+
+    expect(reopenTaskInList(tasks, "filed")).toEqual([
+      makeTask({ id: "filed", status: "todo" }),
+      makeTask({ id: "open", status: "in-progress" })
+    ]);
+    expect(reopenTaskInList(tasks, "open")).toEqual(tasks);
+  });
+
 });

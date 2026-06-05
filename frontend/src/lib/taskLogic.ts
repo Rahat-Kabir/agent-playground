@@ -129,6 +129,13 @@ export function removeFiledTasks(tasks: Task[]): Task[] {
   return tasks.filter((task) => task.status !== "done");
 }
 
+
+export function reopenTaskInList(tasks: Task[], taskId: string): Task[] {
+  return tasks.map((task) =>
+    task.id === taskId && task.status === "done" ? { ...task, status: "todo" } : task
+  );
+}
+
 export function collectLabels(tasks: Task[]): string[] {
   return Array.from(new Set(tasks.flatMap((task) => task.labels.map((label) => label.trim()).filter(Boolean)))).sort((a, b) =>
     a.localeCompare(b)

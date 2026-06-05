@@ -15,6 +15,7 @@ A small personal task tracker with a FastAPI/Pydantic backend and a React/Vite f
 - Light, dark, or system-matched color theme (Desk lamp control).
 - Export and import the browser ledger as JSON for backup or device moves.
 - Clear all filed (completed) tasks in one step with confirmation.
+- Reopen filed (completed) tasks back to the to-do pile with one click.
 
 ## Project Structure
 

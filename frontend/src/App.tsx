@@ -8,6 +8,7 @@ import {
   isOverdue,
   parseLabels,
   removeFiledTasks,
+  reopenTaskInList,
   summarizeDueSoon,
   visibleTasks
 } from "./lib/taskLogic";
@@ -167,6 +168,10 @@ export default function App() {
 
   function completeTask(taskId: string) {
     setTasks((current) => current.map((task) => (task.id === taskId ? { ...task, status: "done" } : task)));
+  }
+
+  function reopenTask(taskId: string) {
+    setTasks((current) => reopenTaskInList(current, taskId));
   }
 
   function deleteTask(taskId: string) {
@@ -544,14 +549,15 @@ export default function App() {
                     <button type="button" className="button" onClick={() => startEdit(task)}>
                       Edit
                     </button>
-                    <button
-                      type="button"
-                      className="button"
-                      onClick={() => completeTask(task.id)}
-                      disabled={task.status === "done"}
-                    >
-                      Complete
-                    </button>
+                    {task.status === "done" ? (
+                      <button type="button" className="button" onClick={() => reopenTask(task.id)}>
+                        Reopen
+                      </button>
+                    ) : (
+                      <button type="button" className="button" onClick={() => completeTask(task.id)}>
+                        Complete
+                      </button>
+                    )}
                     <button type="button" className="button button--danger" onClick={() => deleteTask(task.id)}>
                       Delete
                     </button>
