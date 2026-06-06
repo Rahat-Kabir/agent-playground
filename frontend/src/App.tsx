@@ -12,6 +12,7 @@ import {
   summarizeDueSoon,
   visibleTasks
 } from "./lib/taskLogic";
+import { confirmDeleteTask, emptyLedgerMessage } from "./lib/ledgerUi";
 import { loadTasks, resetTasks, saveTasks } from "./lib/storage";
 import { useDueDateReminders } from "./lib/useDueDateReminders";
 import { useTheme } from "./lib/useTheme";
@@ -98,6 +99,10 @@ export default function App() {
 
   const labels = useMemo(() => collectLabels(tasks), [tasks]);
   const displayedTasks = useMemo(() => visibleTasks(tasks, filters), [tasks, filters]);
+  const emptyMessage = useMemo(
+    () => emptyLedgerMessage(tasks.length, displayedTasks.length),
+    [tasks.length, displayedTasks.length]
+  );
   const openCount = tasks.filter((task) => task.status !== "done").length;
   const doneCount = tasks.filter((task) => task.status === "done").length;
   const overdueCount = tasks.filter((task) => isOverdue(task, currentTime)).length;
@@ -175,7 +180,12 @@ export default function App() {
   }
 
   function deleteTask(taskId: string) {
-    setTasks((current) => current.filter((task) => task.id !== taskId));
+    const task = tasks.find((entry) => entry.id === taskId);
+    if (!task || !confirmDeleteTask(task.title)) {
+      return;
+    }
+
+    setTasks((current) => current.filter((entry) => entry.id !== taskId));
     if (editingId === taskId) {
       setEditingId(null);
       setForm(blankForm);
@@ -530,6 +540,11 @@ export default function App() {
           ) : null}
 
           <div className="task-list">
+            {emptyMessage ? (
+              <p className="task-list__empty" role="status">
+                {emptyMessage}
+              </p>
+            ) : null}
             {displayedTasks.map((task) => {
               const overdue = isOverdue(task);
               return (
