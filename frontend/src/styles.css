@@ -467,6 +467,18 @@ textarea {
   padding: 0 24px 24px;
 }
 
+.task-list__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 28px 24px;
+  border: 2px dashed var(--ink);
+  background: var(--task-card-bg);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.25rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
 .task-card {
   position: relative;
   display: grid;
