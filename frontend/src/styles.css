@@ -437,6 +437,10 @@ textarea {
   grid-column: span 2;
 }
 
+.filters__clear {
+  align-self: end;
+}
+
 .checkbox-label {
   display: flex;
   gap: 10px;

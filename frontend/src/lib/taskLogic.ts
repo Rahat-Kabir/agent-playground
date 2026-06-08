@@ -121,6 +121,18 @@ export function visibleTasks(tasks: Task[], filters: TaskFilters, today = new Da
   return sortTasks(filterTasks(tasks, filters, today), filters.sortBy);
 }
 
+export function hasActiveFilters(filters: TaskFilters, defaults: TaskFilters): boolean {
+  return (
+    filters.status !== defaults.status ||
+    filters.priority !== defaults.priority ||
+    filters.label !== defaults.label ||
+    filters.dueWindow !== defaults.dueWindow ||
+    filters.overdueOnly !== defaults.overdueOnly ||
+    filters.search !== defaults.search ||
+    filters.sortBy !== defaults.sortBy
+  );
+}
+
 export function countFiledTasks(tasks: Task[]): number {
   return tasks.filter((task) => task.status === "done").length;
 }

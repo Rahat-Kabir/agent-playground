@@ -5,6 +5,7 @@ import { LedgerImportError, downloadLedgerExport, parseLedgerImport } from "./li
 import {
   collectLabels,
   countFiledTasks,
+  hasActiveFilters,
   isOverdue,
   parseLabels,
   removeFiledTasks,
@@ -84,6 +85,7 @@ export default function App() {
   const dueDateReminders = useDueDateReminders(tasks);
   const theme = useTheme();
   const importInputRef = useRef<HTMLInputElement>(null);
+  const filtersActive = hasActiveFilters(filters, defaultFilters);
 
   useEffect(() => {
     saveTasks(tasks);
@@ -523,6 +525,14 @@ export default function App() {
               />
               Overdue only
             </label>
+            <button
+              type="button"
+              className="button filters__clear"
+              disabled={!filtersActive}
+              onClick={() => setFilters(defaultFilters)}
+            >
+              Clear filters
+            </button>
             <label className="checkbox-label reminders-toggle">
               <input
                 type="checkbox"

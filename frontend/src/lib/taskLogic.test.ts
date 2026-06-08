@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   countFiledTasks,
   filterTasks,
+  hasActiveFilters,
   isDueThisWeek,
   isDueToday,
   isOverdue,
@@ -161,6 +162,13 @@ describe("task logic", () => {
     const result = visibleTasks(tasks, { ...baseFilters, search: "envelope" });
 
     expect(result.map((task) => task.title)).toEqual(["Buy envelopes", "Archive photo negatives"]);
+  });
+
+  it("detects whether filters differ from their defaults", () => {
+    expect(hasActiveFilters(baseFilters, baseFilters)).toBe(false);
+    expect(hasActiveFilters({ ...baseFilters, search: "rent" }, baseFilters)).toBe(true);
+    expect(hasActiveFilters({ ...baseFilters, overdueOnly: true }, baseFilters)).toBe(true);
+    expect(hasActiveFilters({ ...baseFilters, sortBy: "priority" }, baseFilters)).toBe(true);
   });
 
   it("normalizes comma-separated labels", () => {
